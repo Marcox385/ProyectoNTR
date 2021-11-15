@@ -173,19 +173,23 @@ def rutina(res):
 
     reps, generada = False, [[],[]]
 
-    with open("ejercicios.txt","r") as ejerFile:
-        pos = 0
-        while(True):
-            curr = ejerFile.readline()
-            
-            if(curr == "SEP\n"):
-                generada[pos].append("\n")
-            elif(curr == "DSEP\n"):
-                pos += 1
-            elif(curr == "FIN"):
-                break
-            else:
-                generada[pos].append(curr)
+    try:
+        with open("ejercicios.txt","r") as ejerFile:
+            pos = 0
+            while(True):
+                curr = ejerFile.readline()
+                
+                if(curr == "SEP\n"):
+                    generada[pos].append("\n")
+                elif(curr == "DSEP\n"):
+                    pos += 1
+                elif(curr == "FIN"):
+                    break
+                else:
+                    generada[pos].append(curr)
+    except FileNotFoundError as fe:
+        print("\aEl archivo \"ejercicios.txt\" no ha sido encontrado.\nAgrega este archivo para poder generar las rutinas de ejercicio...\n")
+        return
 
     if(0 <= abs(res) <= 3.2):
         print("Tu IMC indica un peso normal\n"
