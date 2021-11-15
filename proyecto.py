@@ -41,7 +41,7 @@ def alejamiento(): # obtiene la diferencia entre el promedio del IMC ideal y el 
     except:
         print("\aDebes calcular tu IMC primero\n")
 
-def dieta(res, modo = 0): # Genera un plan de dieta
+def dieta(res): # Genera un plan de dieta
     global calcIMC, avgIdeal, dias, genDieta
     dec = None
 
@@ -154,13 +154,126 @@ def dieta(res, modo = 0): # Genera un plan de dieta
                         return
 
 def rutina(res):
-    global calcIMC, avgIdeal
+    global calcIMC, avgIdeal, genRutina
+
+    if(genRutina != None):
+        print("RUTINA GUARDADA")
+        print(*genRutina,sep="\n")
+
+        while(True):
+            dec = input("Ya existe una rutina generada\n"
+                        "¿Deseas generar otra?\n"
+                        "S/N -> ").upper()
+            if(dec == "S"):
+                break
+            elif(dec == "N"):
+                return
+            else:
+                print("Error, intenta de nuevo...")
+
+    reps, generada = False, [[],[]]
+
+    with open("ejercicios.txt","r") as ejerFile:
+        pos = 0
+        while(True):
+            curr = ejerFile.readline()
+            
+            if(curr == "SEP\n"):
+                generada[pos].append("\n")
+            elif(curr == "DSEP\n"):
+                pos += 1
+            elif(curr == "FIN"):
+                break
+            else:
+                generada[pos].append(curr)
 
     if(0 <= abs(res) <= 3.2):
         print("Tu IMC indica un peso normal\n"
               "Advertencia: Una rutina intensa puede resultar perjudicial si no se ejecuta correctamente")
+        reps = True
+
+    print("\nRUTINA SUGERIDA")
+
+    if(res < 0 or reps): # Rutina para aumentar de peso y definir musculatura
+        print(*generada[0],sep="\n")
+        genRutina = generada[0]
+    elif(res > 3.2): # Rutina para bajar de peso
+        print(*generada[1],sep="\n")
+        genRutina = generada[1]
 
     print("¡No te olvides de combinar tu rutina de ejercicios con un plan de dieta para lograr mejores resultados!")
+
+def exportarArchivos():
+    global genDieta, genRutina
+
+    if(genDieta== None and genRutina == None):
+        print("Error: no hay información para generar ningún archivo aún.\nIntenta utilizar las herramientas del sistema...")
+        return
+
+    if(genDieta == None):
+        print("Advertencia: no se ha generado ninguna dieta aún...")
+    
+    if(genRutina == None):
+        print("Advertencia: no se ha generado ninguna rutina de ejercicios aún...")
+
+    while(True):
+        modo = input("Selecciona qué archivo deseas exportar\n"
+                      "D - Dieta\n"
+                      "R - Rutina\n"
+                      "A - Ambos\n"
+                      "-> ").upper()
+        if(modo in ("D","R","A")):
+            break
+        else:
+            print("Ingresa una opción válida...\n")
+
+    def nombreArchivo():
+        prohibidos = ["<",">",":","\"","/","\\","|","?","*"]
+
+        while(True):
+            found = False
+            nombre = input("Ingresa un nombre para tu archivo: ")
+            for c in nombre:
+                for p in prohibidos:
+                    if(c == p):
+                        found = True
+
+                if(found):
+                    break
+            else:
+                return nombre
+
+            print("\nIngresa un nombre válido para tu archivo...\n")    
+
+    def exportarArchivo(elementos):
+        success = False
+
+        try:
+            with open("%s.txt" % nombreArchivo(), "x") as f:
+                for l in elementos:
+                    f.write(l)
+                else:
+                    success = True
+        except FileExistsError as fe: # Archivo ya existe
+            print("¡El archivo ya existe!\nIntenta con otro nombre...\n")
+        except:
+            print("Un error inesperado ha ocurrido, intenta de nuevo...\n")
+        finally:
+            if(success):
+                print("¡Archivo creado con éxito!")
+
+    if(modo == "A" and genDieta != None and genRutina == None): # Ambos
+        print("\nArchivo para dieta")
+        exportarArchivo(genDieta)
+
+        print("\nArchivo para rutina")
+        exportarArchivo(genRutina)
+    elif(modo == "D" and genDieta != None): # Dieta
+        exportarArchivo(genDieta)
+    elif(modo == "R" and genRutina != None): # Rutina
+        exportarArchivo(genRutina)
+    else:
+        print("\n\aError, vuelve a intentar...\n")
 
 def menu(): # Despliega el menú y retorna la opción seleccionada
     global calcIMC, inPeso, inAlt
@@ -171,8 +284,9 @@ def menu(): # Despliega el menú y retorna la opción seleccionada
                              "1.- %s\n"
                              "2.- Plan de dieta\n"
                              "3.- Rutina de ejercicios\n"
-                             "4.- Limpiar pantalla\n"
-                             "5.- Salir\n"
+                             "4.- Exportar archivos\n"
+                             "5.- Limpiar pantalla\n"
+                             "6.- Salir\n"
                              "-> "
             % ("Calcular IMC" if(calcIMC == None) else "Nuevo IMC (Peso: %.2f, Altura: %.2f, IMC: %.2f)" % (inPeso,inAlt,calcIMC))))
         except:
@@ -215,9 +329,11 @@ if(__name__ == "__main__"): # Para ejecutar como módulo principal
 
             if(res):
                 rutina(res)
-        elif(dec == 4): # Limpiar pantalla
+        elif(dec == 4): # Exportar dieta y archivos
+            exportarArchivos()
+        elif(dec == 5): # Limpiar pantalla
             limpiarPantalla()
-        elif(dec == 5): # Salir
+        elif(dec == 6): # Salir
             input("Gracias por usar nuestro programa, ¡Hasta pronto!"
                   "\nPresiona ENTER para continuar...")
             exit()
