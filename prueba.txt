@@ -1,0 +1,27 @@
+
+LUNES
+	Desayuno: Huevos y Sandwich
+	Comida: Carne
+	Dia: Jugo (2 porciones) y Chocolate oscuro (4 porciones)
+MARTES
+	Desayuno: Manzana y Huevos
+	Comida: Pescado
+	Dia: Almendras (2 porciones) y Aguacate (2 porciones)
+MIÉRCOLES
+	Desayuno: Plátano y Pan adicionado con cereales integrales
+	Comida: Pasta Integral
+	Dia: Pistaches (2 porciones) y Cacahuates (2 porciones)
+JUEVES
+	Desayuno: Yogur y Manzana
+	Comida: Arroz
+	Dia: Barra de cereal (2 porciones) y Chocolate oscuro (4 porciones)
+VIERNES
+	Desayuno: Yogur y Pan adicionado con cereales integrales
+	Comida: Arroz
+	Dia: Aguacate (2 porciones) y Jugo (2 porciones)
+SÁBADO
+	Desayuno: Plátano y Huevos
+	Comida: Pasta Integral
+	Dia: Pistaches (2 porciones) y Barra de cereal (2 porciones)
+DOMINGO
+	Día libre
