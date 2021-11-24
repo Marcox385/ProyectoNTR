@@ -2,14 +2,47 @@ SubProceso valor <- imc (peso, altura)
 	valor <- peso / (altura^2)
 FinSubProceso
 
+SubProceso valor <- dieta ()
+	Escribir "Generar dieta basada en IMC"
+	Escribir "Guardar dieta en variable global"
+FinSubProceso
+
+SubProceso valor <- rutina ()
+	Escribir "Generar rutina de ejercicios basada en IMC"
+	Escribir "Guardar rutina fija en variable global"
+FinSubProceso
+
+SubProceso valor <- exportar ()
+	Escribir "Selecciona qu√© archivo deseas exportar"
+	Escribir "D - Dieta"
+	Escribir "R - Rutina"
+	Escribir "A - Ambos"
+	Leer seleccion
+	
+	Si seleccion == "D" Entonces
+		Escribir "Exportar archivo de dieta"
+	SiNo
+		Si seleccion == "R" Entonces
+			Escribir "Exportar archivo de rutina de ejercicios"
+		SiNo
+			Si seleccion == "A" Entonces
+				Escribir "Exportar ambos archivos"
+			SiNo
+				Escribir "Error en selecci√≥n"
+			FinSi
+		FinSi
+	FinSi
+FinSubProceso
+
 SubProceso decision <- menu ()
 	Escribir ""
-	Escribir "Selecciona una opciÛn"
+	Escribir "Selecciona una opci√≥n"
 	Escribir "1.- Calcular IMC"
 	Escribir "2.- Plan de dieta"
 	Escribir "3.- Rutina de ejercicios"
-	Escribir "4.- Limpiar pantalla"
-	Escribir "5.- Salir"
+	Escribir "4.- Exportar archivos"
+	Escribir "5.- Limpiar pantalla"
+	Escribir "6.- Salir"
 	Leer decision
 Fin SubProceso
 
@@ -25,7 +58,10 @@ Proceso main
 	error <- "Un error inesperado ha ocurrido, intenta de nuevo..."
 	
 	Escribir "----- BIENVENID@ -----"
-	// Esperar 0.5 Segundos
+	
+	
+	Definir peso como real
+	Definir altura como real
 	
 	control1 <- 1
 	Mientras control1 = 1 Hacer
@@ -35,19 +71,17 @@ Proceso main
 			1:
 				control2 <- 1
 				Mientras control2 = 1 Hacer
-					Definir peso como real
 					Escribir "Ingresa el peso en KG " sin saltar
 					Leer peso
 					
-					Definir altura como real
 					Escribir "Ingresa la altura en METROS " sin saltar
 					Leer altura
 					
 					Si 0 >= peso O peso >= 600 Entonces
-						Escribir "Peso inv·lido, intenta de nuevo..."
+						Escribir "Peso inv√°lido, intenta de nuevo..."
 					SiNo
 						Si 0 >= altura O altura >= 2.5 Entonces
-							Escribir "Altura inv·lida, intenta de nuevo..."
+							Escribir "Altura inv√°lida, intenta de nuevo..."
 						SiNo
 							calcImc <- redon(imc(peso, altura))
 							control2 <- 0
@@ -83,10 +117,18 @@ Proceso main
 						FinSi
 					FinSi
 				FinSi
+			2:
+				Escribir "Calcular alejamiento"
+				Escribir dieta()
+			3:
+				Escribir "Calcular alejamiento"
+				Escribir rutina()
 			4:
-				Limpiar Pantalla
+				Escribir exportar()
 			5:
-				Escribir "Gracias por usar nuestro programa, °Hasta pronto!"
+				Limpiar Pantalla
+			6:
+				Escribir "Gracias por usar nuestro programa, ¬°Hasta pronto!"
 				control1 <- 0
 		FinSegun
 	Fin Mientras	
